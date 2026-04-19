@@ -1010,7 +1010,7 @@ Click **Create parameter** again
 | Tier | Standard |
 | Type | String |
 | Data type | text |
-| Value | `CSVC-A3-G7@Group` |
+| Value | `CSVC-A3-G7Group!` |
 
 ⚠️ **IMPORTANT:** This password must match exactly what Member 2 uses when creating the RDS instance.
 
@@ -1042,7 +1042,7 @@ Go to Parameter Store main page and verify you see:
 |---|---|---|
 | /example/endpoint | String | PLACEHOLDER |
 | /example/username | String | admin |
-| /example/password | String | CSVC-A3-G7@Group |
+| /example/password | String | CSVC-A3-G7Group! |
 | /example/database | String | countries |
 
 📸 **Screenshot Required:** Parameter Store showing all 4 parameters under /example/ prefix
@@ -1212,8 +1212,8 @@ The assignment requires high availability. **Production template enables Multi-A
 | DB instance identifier | `A3-G7-CSVC-RDS` |
 | Master username | `admin` |
 | Credentials management | Self managed |
-| Master password | `CSVC-A3-G7@Group` |
-| Confirm master password | `CSVC-A3-G7@Group` |
+| Master password | `CSVC-A3-G7Group!` |
+| Confirm master password | `CSVC-A3-G7Group!` |
 
 ⚠️ **CRITICAL:** This password MUST match the password Member 1 entered in Parameter Store (/example/password).
 
@@ -1416,7 +1416,7 @@ Replace `<YOUR-RDS-ENDPOINT>` with your actual endpoint:
 ```bash
 mysql -h <YOUR-RDS-ENDPOINT> -u admin -p
 ```
-*Enter your password: `CSVC-A3-G7@Group`*
+*Enter your password: `CSVC-A3-G7Group!`*
 
 **Verify you see the "countries" database:**
 ```sql
@@ -1495,7 +1495,6 @@ curl http://localhost/index.php
 ⚠️ **CRITICAL:** Do NOT start until Member 1 confirms the PHP app is working. You will create an AMI from this instance - if the app is broken, your AMI will be broken.
 
 ---
-
 ### TASK 1: Create AMI from Configured EC2 Instance
 
 An AMI (Amazon Machine Image) is a snapshot of an EC2 instance. You'll create an image of the fully configured web server so the Auto Scaling Group can launch identical copies.
@@ -2277,6 +2276,29 @@ After stress test completes:
 8. ✅ Website loaded in browser via ALB URL
 9. ✅ Failover test screenshots (during and after)
 10. ✅ (Optional) CPU scaling test
+
+---
+
+## 🎤 Video Presentation Script (Member 4)
+*Use this script for your video recording. It covers the Intro, the "Why," and the Conclusion.*
+
+### **1. The Introduction**
+"Hi everyone, I’m Member 4. While my teammates local-configured the application and database, my role was to build the **Infrastructure Foundation** that makes this website fast, secure, and impossible to crash. Today, I’m going to show you how I moved our app from a single server into a **High-Availability Global Cluster**."
+
+### **2. The "Why" (Strategic Decisions)**
+"As I walk through the tasks, here is why I made these strategic choices:"
+
+*   **The AMI & Launch Template:** 
+    > *"I created a custom AMI because I wanted a 'Gold Image' of our fully configured server. I do this so that if a server ever dies, AWS can instantly launch a perfect clone in seconds without any human help."*
+
+*   **The Auto Scaling Group (ASG):**
+    > *"I set up an ASG because it makes our project **Elastic**. I do this so the website can handle 10 users or 10,000 users without slowing down. It automatically adds servers when traffic is high and deletes them when it's low to save us money."*
+
+*   **The Application Load Balancer (ALB):**
+    > *"I chose an ALB to be our 'Traffic Cop.' I do this because I want to distribute user traffic across two different Availability Zones. By doing this, we ensure that even if an entire data center goes dark, our website stays online for the users."*
+
+### **3. The Conclusion (What we have achieved)**
+"In conclusion, we have transformed a simple PHP script into a **Enterprise-Grade Cloud Application**. By combining Member 1’s deployment logic, Member 2’s data migration, and my High-Availability infrastructure, we have achieved a system that is **Self-Healing, Scalable, and Secure**. Thank you!"
 
 ---
 
@@ -3822,3 +3844,16 @@ Priority 3 (breaks assignment):
 *Total Word Count: ~28,000*
 *Total Tables: 94*
 *Total Code Blocks: 47*
+
+
+
+---
+
+## 🏆 Final Project Conclusion (Whole Group)
+*Use this as the 'Big Finish' for your video to summarize everything you built.*
+
+"In summary, we have successfully built a fully automated, three-tier cloud infrastructure that transforms a simple PHP application into a resilient global service. We didn't just host a website; we architected a secure environment using a custom VPC, a high-availability RDS database across multiple zones, and a smart scaling system that adapts to user demand in real time. Every component—from the secure Parameter Store for credentials to the Application Load Balancer—works in perfect harmony to ensure that our data is always protected and our service is always online."
+
+"This architecture is a direct reflection of AWS best practices, prioritizing both security and reliability. By removing single points of failure and implementing defensive security groups, we have created a platform that is ready for production. Our project demonstrates that with the right cloud strategy, we can build systems that are not only powerful and fast but also cost-efficient and self-managing. We are proud of this robust solution, and it stands as a solid foundation for any modern cloud-native business."
+
+---
