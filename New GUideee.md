@@ -1010,7 +1010,7 @@ Click **Create parameter** again
 | Tier | Standard |
 | Type | String |
 | Data type | text |
-| Value | `YourPassword123!` |
+| Value | `CSVC-A3-G7@Group` |
 
 ⚠️ **IMPORTANT:** This password must match exactly what Member 2 uses when creating the RDS instance.
 
@@ -1042,7 +1042,7 @@ Go to Parameter Store main page and verify you see:
 |---|---|---|
 | /example/endpoint | String | PLACEHOLDER |
 | /example/username | String | admin |
-| /example/password | String | YourPassword123! |
+| /example/password | String | CSVC-A3-G7@Group |
 | /example/database | String | countries |
 
 📸 **Screenshot Required:** Parameter Store showing all 4 parameters under /example/ prefix
@@ -1212,8 +1212,8 @@ The assignment requires high availability. **Production template enables Multi-A
 | DB instance identifier | `A3-G7-CSVC-RDS` |
 | Master username | `admin` |
 | Credentials management | Self managed |
-| Master password | `YourPassword123!` |
-| Confirm master password | `YourPassword123!` |
+| Master password | `CSVC-A3-G7@Group` |
+| Confirm master password | `CSVC-A3-G7@Group` |
 
 ⚠️ **CRITICAL:** This password MUST match the password Member 1 entered in Parameter Store (/example/password).
 
@@ -1416,7 +1416,7 @@ Replace `<YOUR-RDS-ENDPOINT>` with your actual endpoint:
 ```bash
 mysql -h <YOUR-RDS-ENDPOINT> -u admin -p
 ```
-*Enter your password: `YourPassword123!`*
+*Enter your password: `CSVC-A3-G7@Group`*
 
 **Verify you see the "countries" database:**
 ```sql
