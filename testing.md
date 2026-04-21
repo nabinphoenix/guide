@@ -30,8 +30,8 @@ Verify this exact table:
 
 | Instance Name         | Private IP   | AZ          | State   | Status Checks     |
 |-----------------------|--------------|-------------|---------|-------------------|
-| A3-G7-CSVC-EC2-AZ1   | 10.0.3.177   | us-east-1a  | Running | 2/2 checks passed |
-| A3-G7-CSVC-EC2-AZ2   | 10.0.4.235   | us-east-1b  | Running | 2/2 checks passed |
+| A3-G7-CSVC-EC2 (ASG)  | 10.0.3.165   | us-east-1a  | Running | 2/2 checks passed |
+| A3-G7-CSVC-EC2 (ASG)  | 10.0.4.235   | us-east-1b  | Running | 2/2 checks passed |
 
 > ✅ **Expected:** Both instances running, 2 instances total.
 
@@ -44,7 +44,7 @@ Verify this exact table:
 
 | Target IP  | Port | AZ         | Health Status |
 |------------|------|------------|---------------|
-| 10.0.3.177 | 80   | us-east-1a | healthy       |
+| 10.0.3.165 | 80   | us-east-1a | healthy       |
 | 10.0.4.235 | 80   | us-east-1b | healthy       |
 
 > ✅ **Expected:** Both targets show `healthy`.
@@ -90,7 +90,7 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 
 ### SEC-01 — EC2 Has No Public IP
 
-1. EC2 → Instances → click on **A3-G7-CSVC-EC2-AZ1** (`10.0.3.177`)
+1. EC2 → Instances → click on the instance with IP `10.0.3.165`
 2. In the **Details** tab, check the **Public IPv4 address** field.
 
 > ✅ **Expected:** Field is blank (dash). No public IP assigned. Direct internet access is impossible.
@@ -101,7 +101,7 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 
 1. In your browser, try to directly access the private IP (this will fail from outside AWS):
    ```
-   http://10.0.3.177/index.php
+   http://10.0.3.165/index.php
    ```
 2. Then access via ALB:
    ```
@@ -152,14 +152,14 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 
 **Step 2 — Terminate one instance:**
 1. EC2 → Instances
-2. Select **A3-G7-CSVC-EC2-AZ2** (`10.0.4.235`)
+2. Select the instance with IP **10.0.4.235**
 3. Click **Instance state** → **Stop instance**
 4. Confirm the stop
 
 **Step 3 — Immediately keep refreshing the browser tab (F5 every 5 seconds)**
 
 > ✅ **Expected:** Website continues to load on every refresh. No downtime.
-> (ALB detects AZ2 instance is unhealthy and sends all traffic to AZ1 instance at `10.0.3.177`)
+> (ALB detects AZ2 instance is unhealthy and sends all traffic to AZ1 instance at `10.0.3.165`)
 
 **Step 4 — Watch Target Group heal:**
 1. EC2 → Target Groups → A3-G7-CSVC-TG → **Targets** tab
@@ -167,7 +167,7 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 
 | Target IP  | Status During Failover |
 |------------|------------------------|
-| 10.0.3.177 | healthy                |
+| 10.0.3.165 | healthy                |
 | 10.0.4.235 | unhealthy (then gone)  |
 
 **Step 5 — Watch ASG auto-replace the instance:**
@@ -215,12 +215,12 @@ triggers a scale-out event and launches additional EC2 instances.
 
 ---
 
-### Step 1 — Open Session Manager for Instance AZ1 (10.0.3.177)
+### Step 1 — Open Session Manager for Instance AZ1 (10.0.3.165)
 
 1. AWS Console → **Systems Manager** (search "Systems Manager" in the top search bar)
 2. Left sidebar → **Session Manager**
 3. Click **Start session** (orange button)
-4. In the list, find the instance with Private IP `10.0.3.177` (Name: A3-G7-CSVC-EC2-AZ1)
+4. In the list, find the instance with Private IP `10.0.3.165`
 5. Select it → Click **Start session**
 6. A terminal window opens in the browser — **keep this tab open**
 
@@ -231,7 +231,7 @@ triggers a scale-out event and launches additional EC2 instances.
 1. Open a **new browser tab**
 2. AWS Console → **Systems Manager** → **Session Manager**
 3. Click **Start session**
-4. Find the instance with Private IP `10.0.4.235` (Name: A3-G7-CSVC-EC2-AZ2)
+4. Find the instance with Private IP `10.0.4.235`
 5. Select it → Click **Start session**
 6. A second terminal window opens — **keep this tab open**
 
@@ -241,7 +241,7 @@ You now have **two terminal tabs** — one for each EC2 instance.
 
 ### Step 3 — Install the `stress` Tool on BOTH Instances
 
-Run this command in **Tab 1 (AZ1 - 10.0.3.177)**:
+Run this command in **Tab 1 (AZ1 - 10.0.3.165)**:
 ```bash
 sudo yum install -y stress
 ```
@@ -278,7 +278,7 @@ Before starting the stress test, open monitoring so you can watch CPU in real ti
 
 ### Step 5 — Launch Stress Test on BOTH Instances Simultaneously
 
-**In Tab 1 (AZ1 — 10.0.3.177)**, run:
+**In Tab 1 (AZ1 — 10.0.3.165)**, run:
 ```bash
 stress --cpu 2 --timeout 300
 ```
@@ -495,5 +495,5 @@ aws ssm get-parameter --name /example/database --region us-east-1
 
 **Verified by:** ____________________  **Date:** 2026-04-21
 **ALB Endpoint:** http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/
-**AZ1 Instance:** 10.0.3.177 (A3-G7-CSVC-EC2-AZ1, us-east-1a)
-**AZ2 Instance:** 10.0.4.235 (A3-G7-CSVC-EC2-AZ2, us-east-1b)
+**AZ1 Instance:** 10.0.3.165 (A3-G7-CSVC-EC2 (ASG), us-east-1a)
+**AZ2 Instance:** 10.0.4.235 (A3-G7-CSVC-EC2 (ASG), us-east-1b)
