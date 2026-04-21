@@ -31,7 +31,7 @@ Verify this exact table:
 | Instance Name         | Private IP   | AZ          | State   | Status Checks     |
 |-----------------------|--------------|-------------|---------|-------------------|
 | A3-G7-CSVC-EC2 (ASG)  | 10.0.3.165   | us-east-1a  | Running | 2/2 checks passed |
-| A3-G7-CSVC-EC2 (ASG)  | 10.0.4.235   | us-east-1b  | Running | 2/2 checks passed |
+| A3-G7-CSVC-EC2 (ASG)  | 10.0.4.120   | us-east-1b  | Running | 2/2 checks passed |
 
 > ✅ **Expected:** Both instances running, 2 instances total.
 
@@ -45,7 +45,7 @@ Verify this exact table:
 | Target IP  | Port | AZ         | Health Status |
 |------------|------|------------|---------------|
 | 10.0.3.165 | 80   | us-east-1a | healthy       |
-| 10.0.4.235 | 80   | us-east-1b | healthy       |
+| 10.0.4.120 | 80   | us-east-1b | healthy       |
 
 > ✅ **Expected:** Both targets show `healthy`.
 
@@ -152,7 +152,7 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 
 **Step 2 — Terminate one instance:**
 1. EC2 → Instances
-2. Select the instance with IP **10.0.4.235**
+2. Select the instance with IP **10.0.4.120**
 3. Click **Instance state** → **Stop instance**
 4. Confirm the stop
 
@@ -168,7 +168,7 @@ http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/index.php
 | Target IP  | Status During Failover |
 |------------|------------------------|
 | 10.0.3.165 | healthy                |
-| 10.0.4.235 | unhealthy (then gone)  |
+| 10.0.4.120 | unhealthy (then gone)  |
 
 **Step 5 — Watch ASG auto-replace the instance:**
 1. EC2 → Auto Scaling Groups → A3-G7-CSVC-ASG → **Activity** tab
@@ -226,12 +226,12 @@ triggers a scale-out event and launches additional EC2 instances.
 
 ---
 
-### Step 2 — Open Session Manager for Instance AZ2 (10.0.4.235)
+### Step 2 — Open Session Manager for Instance AZ2 (10.0.4.120)
 
 1. Open a **new browser tab**
 2. AWS Console → **Systems Manager** → **Session Manager**
 3. Click **Start session**
-4. Find the instance with Private IP `10.0.4.235`
+4. Find the instance with Private IP `10.0.4.120`
 5. Select it → Click **Start session**
 6. A second terminal window opens — **keep this tab open**
 
@@ -246,7 +246,7 @@ Run this command in **Tab 1 (AZ1 - 10.0.3.165)**:
 sudo yum install -y stress
 ```
 
-Run this command in **Tab 2 (AZ2 - 10.0.4.235)**:
+Run this command in **Tab 2 (AZ2 - 10.0.4.120)**:
 ```bash
 sudo yum install -y stress
 ```
@@ -283,7 +283,7 @@ Before starting the stress test, open monitoring so you can watch CPU in real ti
 stress --cpu 2 --timeout 300
 ```
 
-**IMMEDIATELY switch to Tab 2 (AZ2 — 10.0.4.235)** and run:
+**IMMEDIATELY switch to Tab 2 (AZ2 — 10.0.4.120)** and run:
 ```bash
 stress --cpu 2 --timeout 300
 ```
