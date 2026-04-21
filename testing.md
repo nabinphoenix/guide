@@ -415,6 +415,8 @@ Open each URL in browser and verify no 404 or 500 error:
 | Life Expectancy | `http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/lifeexpectancy.php` | Life expectancy data loads |
 | Mortality | `http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/mortality.php` | Mortality data loads |
 | Mobile | `http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/mobile.php` | Mobile data loads |
+| Search Interface | `http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/query.php` | Query selection form loads |
+| Query Results | `http://a3-g7-csvc-alb-51735129.us-east-1.elb.amazonaws.com/query2.php` | Filtered RDS data displays correctly |
 
 ---
 
